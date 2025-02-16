@@ -30,9 +30,9 @@ async fn blink(pin: AnyPin) {
 
     loop {
         led.set_high();
-        Timer::after(Duration::from_millis(150)).await;
+        Timer::after(Duration::from_millis(500)).await;
         led.set_low();
-        Timer::after(Duration::from_millis(150)).await;
+        Timer::after(Duration::from_millis(500)).await;
     }
 }
 
