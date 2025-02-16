@@ -38,7 +38,7 @@ async fn blink(pin: AnyPin) {
 
 #[embassy_executor::task]
 async fn reset_if_requested(pin: AnyPin) {
-    let mut reset_btn = Input::new(pin, Pull::Up);
+    let mut reset_btn = Input::new(pin, Pull::Down);
 
     reset_btn.wait_for_rising_edge().await;
 
@@ -60,37 +60,38 @@ async fn main(spawner: Spawner) -> ! {
         hal::set_default_serial(uart);
     }
 
-    // GPIO
+    // GPIO, PB4 and PB18 are both leds
+    // spawner.spawn(blink(p.PB4.degrade())).unwrap();
     spawner.spawn(blink(p.PB4.degrade())).unwrap();
 
-    spawner.spawn(reset_if_requested(p.PB23.degrade())).unwrap();
+    spawner.spawn(reset_if_requested(p.PA1.degrade())).unwrap();
 
     let mut boot_btn = Input::new(p.PB22, Pull::Up);
 
     let rtc = Rtc::new(p.RTC);
 
-    println!("\n\n\n");
-    println!("Hello World from ch58x-hal!");
-    println!(
-        r#"
-    ______          __
-   / ____/___ ___  / /_  ____ _____________  __
-  / __/ / __ `__ \/ __ \/ __ `/ ___/ ___/ / / /
- / /___/ / / / / / /_/ / /_/ (__  |__  ) /_/ /
-/_____/_/ /_/ /_/_.___/\__,_/____/____/\__, /
-                                      /____/   on CH582F"#
-    );
-    println!("System Clocks: {}", hal::sysctl::clocks().hclk);
-    println!("ChipID: 0x{:02x}", hal::signature::get_chip_id());
-    println!("RTC datetime: {}", rtc.now());
+//     println!("\n\n\n");
+//     println!("Hello World from ch58x-hal!");
+//     println!(
+//         r#"
+//     ______          __
+//    / ____/___ ___  / /_  ____ _____________  __
+//   / __/ / __ `__ \/ __ \/ __ `/ ___/ ___/ / / /
+//  / /___/ / / / / / /_/ / /_/ (__  |__  ) /_/ /
+// /_____/_/ /_/ /_/_.___/\__,_/____/____/\__, /
+//                                       /____/   on CH582F"#
+//     );
+//     println!("System Clocks: {}", hal::sysctl::clocks().hclk);
+//     println!("ChipID: 0x{:02x}", hal::signature::get_chip_id());
+//     println!("RTC datetime: {}", rtc.now());
 
-    println!("Awaiting boot button press... (press reset to exit)");
+//     println!("Awaiting boot button press... (press reset to exit)");
 
     loop {
         boot_btn.wait_for_rising_edge().await;
 
-        println!("Boot pressed!!");
-        println!("inst => {}", rtc.now());
+        // println!("Boot pressed!!");
+        // println!("inst => {}", rtc.now());
 
         // Delay.delay_ms(1000_u32); // blocking delay
         // Timer::after(Duration::from_millis(10000)).await;

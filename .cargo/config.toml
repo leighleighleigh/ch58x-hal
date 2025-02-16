@@ -5,9 +5,9 @@ target = "riscv32imac-unknown-none-elf"
 run-demo = "run --release --example"
 
 [target.riscv32imac-unknown-none-elf]
-# runner = "wchisp flash"
+ runner = "wchisp flash"
 # runner = "wlink -v flash --dry-run"
-runner = "wlink -v flash"
+# runner = "wlink -v flash"
 # runner = "wlink -v flash --watch-serial"
 
 # runner = "probe-rs run --chip CH582 --chip-description-path definition.yaml"
@@ -19,3 +19,6 @@ rustflags = [
     # "--emit", "obj",
     # "--emit", "asm",
 ]
+
+[unstable]
+build-std = ["core", "alloc"]

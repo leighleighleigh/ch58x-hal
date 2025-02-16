@@ -1,0 +1,6 @@
+[toolchain]
+#channel = "nightly"
+# below version avoids the 'error: item does not constrain `blink::Fut::{opaque#0}`, but has it in its signature' error?
+channel = "nightly-2024-05-23"
+components = ['rust-src','rust-std']
+profile = "default"
